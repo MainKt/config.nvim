@@ -9,9 +9,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-vim.g.mapleader = ' '
-vim.g.maplocalleader = '\\'
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.undofile = true
@@ -26,12 +23,13 @@ vim.opt.shiftwidth = 2
 vim.opt.guicursor = ''
 vim.opt.inccommand = 'split'
 
+vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
+
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
-vim.api.nvim_create_autocmd({ 'TermEnter', 'TermLeave' }, {
-  command = 'set invnu invrnu',
-})
+vim.api.nvim_create_autocmd({ 'TermEnter', 'TermLeave' }, { command = 'set invnu invrnu' })
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>')
 
@@ -50,6 +48,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 
 local spec = {
   'tpope/vim-sleuth',
+  'tpope/vim-surround',
   'nvim-tree/nvim-web-devicons',
   'neovim/nvim-lspconfig',
 
@@ -60,15 +59,8 @@ local spec = {
   { 'echasnovski/mini.statusline', opts = {} },
   { 'echasnovski/mini.ai',         opts = {} },
 
-  {
-    'tpope/vim-fugitive',
-    keys = { { '<leader>g', '<cmd>Git<CR>' } }
-  },
-
-  {
-    'mbbill/undotree',
-    keys = { { '<leader>u', '<cmd>UndotreeToggle<CR>' } }
-  },
+  { 'tpope/vim-fugitive',          keys = { { '<leader>g', '<cmd>Git<CR>' } } },
+  { 'mbbill/undotree',             keys = { { '<leader>u', '<cmd>UndotreeToggle<CR>' } } },
 
   {
     'stevearc/oil.nvim',
@@ -86,14 +78,7 @@ local spec = {
 
   {
     'williamboman/mason-lspconfig.nvim',
-    opts = {
-      handlers = {
-        function(server)
-          local lspconfig = require('lspconfig')
-          lspconfig[server].setup({})
-        end
-      }
-    }
+    opts = { handlers = { function(server) require('lspconfig')[server].setup({}) end } }
   },
 
   {
@@ -101,7 +86,7 @@ local spec = {
     opts = {
       ensure_installed = {
         'lua-language-server', 'bash-language-server', 'gopls', 'zls', 'pyright', 'rust-analyzer', 'clangd', 'elixir-ls',
-        'emmet-ls', 'eslint',
+        'emmet-ls', 'eslint', 'cpptools',
       },
       auto_update = true,
     }
@@ -109,16 +94,9 @@ local spec = {
 
   {
     'stevearc/conform.nvim',
-    opts = {
-      format_on_save = { timeout_ms = 500, lsp_format = 'fallback' },
-    },
+    opts = { format_on_save = { timeout_ms = 500, lsp_format = 'fallback' } },
     keys = {
-      {
-        '<leader>=',
-        function()
-          require('conform').format({ async = true, lsp_format = 'fallback' })
-        end
-      },
+      { '<leader>=', function() require('conform').format({ async = true, lsp_format = 'fallback' }) end },
     }
   },
 
@@ -126,9 +104,7 @@ local spec = {
     'folke/lazydev.nvim',
     ft = 'lua',
     dependencies = { { 'Bilal2453/luvit-meta', lazy = true } },
-    opts = {
-      library = { { path = 'luvit-meta/library', words = { 'vim%.uv' } } },
-    },
+    opts = { library = { { path = 'luvit-meta/library', words = { 'vim%.uv' } } } },
   },
 
   {
@@ -197,9 +173,7 @@ local spec = {
         dependencies = {
           {
             'rafamadriz/friendly-snippets',
-            config = function()
-              require('luasnip.loaders.from_vscode').lazy_load()
-            end,
+            config = function() require('luasnip.loaders.from_vscode').lazy_load() end,
           },
         },
       },
@@ -267,10 +241,7 @@ local spec = {
       local dap                                          = require('dap')
 
       local elixir_ls_debugger                           = vim.fn.exepath 'elixir-ls-debugger'
-      dap.adapters.mix_task                              = {
-        type = 'executable',
-        command = elixir_ls_debugger,
-      }
+      dap.adapters.mix_task                              = { type = 'executable', command = elixir_ls_debugger }
       dap.configurations.elixir                          = {
         {
           type = 'mix_task',
@@ -283,19 +254,38 @@ local spec = {
         },
       }
 
+      local cpptools                                     = vim.fn.exepath 'OpenDebugAD7'
+      dap.adapters.cppdbg                                = { id = 'cppdbg', type = 'executable', command = cpptools }
+      dap.configurations.cpp                             = {
+        {
+          name = "Launch file",
+          type = "cppdbg",
+          request = "launch",
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          cwd = '${workspaceFolder}',
+          stopAtEntry = true,
+        },
+        {
+          name = 'Attach to gdbserver :1234',
+          type = 'cppdbg',
+          request = 'launch',
+          MIMode = 'gdb',
+          miDebuggerServerAddress = 'localhost:1234',
+          miDebuggerPath = '/usr/bin/gdb',
+          cwd = '${workspaceFolder}',
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+        },
+      }
+
       local dapui                                        = require('dapui')
-      dap.listeners.before.attach.dapui_config           = function()
-        dapui.open()
-      end
-      dap.listeners.before.launch.dapui_config           = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config     = function()
-        dapui.close()
-      end
+      dap.listeners.before.attach.dapui_config           = function() dapui.open() end
+      dap.listeners.before.launch.dapui_config           = function() dapui.open() end
+      dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
+      dap.listeners.before.event_exited.dapui_config     = function() dapui.close() end
     end,
 
     keys = function()
@@ -303,12 +293,13 @@ local spec = {
       return {
         { '<leader>dc', dap.continue },
         { '<leader>db', dap.toggle_breakpoint },
+        { "<leader>dC", function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end },
         { '<leader>di', dap.step_into },
         { '<leader>do', dap.step_out },
         { '<leader>dO', dap.step_over },
         { '<leader>dB', dap.step_back },
         { '<leader>dr', dap.restart },
-        { '<leader>du', dapui.open },
+        { '<leader>du', dapui.toggle },
         { '<leader>de', function() dapui.eval(nil, { enter = true }) end },
       }
     end
