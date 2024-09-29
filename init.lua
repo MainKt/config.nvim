@@ -240,7 +240,7 @@ local spec = {
     config = function()
       local dap                                          = require('dap')
 
-      local elixir_ls_debugger                           = vim.fn.exepath 'elixir-ls-debugger'
+      local elixir_ls_debugger                           = vim.fn.exepath('elixir-ls-debugger')
       dap.adapters.mix_task                              = { type = 'executable', command = elixir_ls_debugger }
       dap.configurations.elixir                          = {
         {
@@ -254,7 +254,7 @@ local spec = {
         },
       }
 
-      local cpptools                                     = vim.fn.exepath 'OpenDebugAD7'
+      local cpptools                                     = vim.fn.exepath('OpenDebugAD7')
       dap.adapters.cppdbg                                = { id = 'cppdbg', type = 'executable', command = cpptools }
       dap.configurations.cpp                             = {
         {
