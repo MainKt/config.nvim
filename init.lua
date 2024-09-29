@@ -58,9 +58,9 @@ local spec = {
   { 'j-hui/fidget.nvim',           opts = {} },
   { 'echasnovski/mini.statusline', opts = {} },
   { 'echasnovski/mini.ai',         opts = {} },
-
   { 'tpope/vim-fugitive',          keys = { { '<leader>g', '<cmd>Git<CR>' } } },
   { 'mbbill/undotree',             keys = { { '<leader>u', '<cmd>UndotreeToggle<CR>' } } },
+  { "tpope/vim-dadbod",            "kristijanhusak/vim-dadbod-ui" },
 
   {
     'stevearc/oil.nvim',
@@ -167,6 +167,7 @@ local spec = {
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-cmdline',
+      "kristijanhusak/vim-dadbod-completion",
       {
         'L3MON4D3/LuaSnip',
         build = 'make install_jsregexp',
@@ -179,8 +180,7 @@ local spec = {
       },
     },
     config = function()
-      local cmp = require('cmp')
-      local luasnip = require('luasnip')
+      local cmp, luasnip = require('cmp'), require('luasnip')
 
       cmp.setup {
         snippet = {
@@ -199,9 +199,7 @@ local spec = {
             end
           end, { 'i', 's' }),
           ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
+            if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
           end, { 'i', 's' }),
         },
         sources = {
@@ -226,6 +224,8 @@ local spec = {
         ),
         matching = { disallow_symbol_nonprefix_matching = false }
       })
+
+      cmp.setup.filetype({ "sql" }, { sources = { { name = "vim-dadbod-completion" }, { name = "buffer" } } })
     end,
   },
 
