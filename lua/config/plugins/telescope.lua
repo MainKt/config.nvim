@@ -12,27 +12,40 @@ return {
           theme = "ivy",
         },
       },
-      extensions = {
-        fzf = {},
-      },
+      extensions = { fzf = {} },
     }
 
     require('telescope').load_extension('fzf')
 
-    local telescope = require('telescope.builtin')
-    vim.keymap.set("n", "<space>h", telescope.help_tags)
-    vim.keymap.set("n", "<space><space>", telescope.find_files)
-    vim.keymap.set("n", "<space>fp", function()
-      telescope.find_files({
-        cwd = vim.fn.stdpath("config")
-      })
-    end)
-    vim.keymap.set("n", "<space>ep", function()
-      telescope.find_files({
-        cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy")
-      })
-    end)
-
     require "config.telescope.multigrep".setup()
+  end,
+  keys = function()
+    local telescope = require('telescope.builtin')
+    vim.keymap.set({ 'n', 'v' }, '<leader>*', telescope.grep_string)
+    return {
+      {
+        "<leader>fp",
+        function()
+          telescope.find_files({
+            cwd = vim.fn.stdpath("config")
+          })
+        end
+      },
+      {
+        "<leader>ep",
+        function()
+          telescope.find_files({
+            cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy")
+          })
+        end
+      },
+      { '<leader><leader>', telescope.find_files },
+      { '<leader>j',        telescope.jumplist },
+      { "<leader>h",        telescope.help_tags },
+      { "<leader>'",        telescope.resume },
+      { '<leader>?',        telescope.oldfiles },
+      { '<leader>,',        telescope.buffers },
+      { '<leader>cx',       telescope.diagnostics },
+    }
   end
 }
