@@ -3,6 +3,7 @@ require("config.lazy")
 vim.opt.shiftwidth = 4
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.wrap = false
 
 vim.keymap.set("n", "<Space>%", "<cmd>source %<CR>")
 vim.keymap.set("n", "<Space>x", ":.lua<CR>")
