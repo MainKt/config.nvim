@@ -44,7 +44,7 @@ return {
         end,
       })
     end,
-    keys = { { "<space>=", vim.lsp.buf.format } },
+    keys = { { "<leader>=", vim.lsp.buf.format } },
   },
   {
     "scalameta/nvim-metals",
@@ -55,7 +55,7 @@ return {
     opts = function()
       local metals_config = require("metals").bare_config()
       metals_config.capabilities = require('blink.cmp').get_lsp_capabilities()
-      metals_config.on_attach = function(client, bufnr) end
+      metals_config.on_attach = function(_client, _bufnr) end
       return metals_config
     end,
     config = function(self, metals_config)

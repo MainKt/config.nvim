@@ -24,7 +24,25 @@ require("lazy").setup({
 
     { "rose-pine/neovim",       config = function() vim.cmd.colorscheme "rose-pine" end },
 
-    "tpopt/vim-surround",
+    {
+      "tpope/vim-surround",
+      "tpope/vim-repeat",
+    },
+
     { 'mbbill/undotree', keys = { { '<leader>u', '<cmd>UndotreeToggle<CR>' } } },
+
+    {
+      'lewis6991/gitsigns.nvim',
+      opts = {
+        signs = {
+          add = { text = '+' },
+          change = { text = '~' },
+          delete = { text = '_' },
+          topdelete = { text = '‾' },
+          changedelete = { text = '~' },
+        },
+      },
+    },
+
   },
 })

@@ -12,12 +12,13 @@ vim.opt.smartcase = true
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set('n', "<leader>fs", ":w<Cr>")
 vim.keymap.set("n", "<leader>%", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>x", ":.lua<CR>")
 vim.keymap.set("v", "<leader>x", ":lua<CR>")
 vim.keymap.set("n", "<leader>w", "<C-W>")
-vim.keymap.set('n', '<leader>ce', vim.diagnostic.open_float)
+vim.keymap.set('n', "<leader>ce", vim.diagnostic.open_float)
 
 vim.keymap.set("n", "<leader>ot", function()
   vim.cmd.vnew()
