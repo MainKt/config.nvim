@@ -8,9 +8,17 @@ vim.opt.wrap = false
 vim.opt.undofile = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.shell = "/usr/bin/zsh"
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.updatetime = 250
 
 vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
 
 vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set('n', "<leader>fs", ":w<Cr>")
@@ -19,13 +27,6 @@ vim.keymap.set("n", "<leader>x", ":.lua<CR>")
 vim.keymap.set("v", "<leader>x", ":lua<CR>")
 vim.keymap.set("n", "<leader>w", "<C-W>")
 vim.keymap.set('n', "<leader>ce", vim.diagnostic.open_float)
-
-vim.keymap.set("n", "<leader>ot", function()
-  vim.cmd.vnew()
-  vim.cmd.term("zsh")
-  vim.cmd.wincmd("J")
-  vim.api.nvim_win_set_height(0, 15)
-end)
 
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>')
 
