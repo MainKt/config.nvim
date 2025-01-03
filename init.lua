@@ -13,22 +13,25 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.updatetime = 250
 
-vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
-vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+-- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
+-- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
 
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  vim.opt.clipboard = "unnamedplus"
 end)
 
-vim.keymap.set('n', "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set('n', "<leader>fs", ":w<Cr>")
+vim.api.nvim_create_user_command("Bd", "bp | bd#", {})
+
+vim.keymap.set("i", "<C-k>", "<nop>") -- i hate you :(
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader>fs", ":w<Cr>")
 vim.keymap.set("n", "<leader>%", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>x", ":.lua<CR>")
 vim.keymap.set("v", "<leader>x", ":lua<CR>")
 vim.keymap.set("n", "<leader>w", "<C-W>")
-vim.keymap.set('n', "<leader>ce", vim.diagnostic.open_float)
+vim.keymap.set("n", "<leader>ce", vim.diagnostic.open_float)
 
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>')
+vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>")
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking",
