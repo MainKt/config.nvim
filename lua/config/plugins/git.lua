@@ -1,4 +1,10 @@
 return {
-  'tpope/vim-fugitive',
-  keys = { { "<leader>g", "<cmd>Git<CR>" } },
+  "NeogitOrg/neogit",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "sindrets/diffview.nvim",
+    "nvim-telescope/telescope.nvim",
+  },
+  config = true,
+  keys = { { "<leader>g", "<cmd>Neogit<CR>" } },
 }
