@@ -24,6 +24,8 @@ require("lazy").setup({
 
     { "rose-pine/neovim",       config = function() vim.cmd.colorscheme "rose-pine" end },
 
+    -- "mattn/emmet-vim",
+
     {
       "tpope/vim-surround",
       "tpope/vim-repeat",
