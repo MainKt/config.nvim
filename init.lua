@@ -24,12 +24,11 @@ vim.api.nvim_create_user_command("Bd", "bp | bd#", {})
 
 vim.keymap.set("i", "<C-k>", "<nop>") -- i hate you :(
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-vim.keymap.set("n", "<leader>fs", ":w<Cr>")
 vim.keymap.set("n", "<leader>%", "<cmd>source %<CR>")
 vim.keymap.set("n", "<leader>x", ":.lua<CR>")
 vim.keymap.set("v", "<leader>x", ":lua<CR>")
 vim.keymap.set("n", "<leader>w", "<C-W>")
-vim.keymap.set("n", "<leader>ce", vim.diagnostic.open_float)
+vim.keymap.set("n", "gre", vim.diagnostic.open_float)
 
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>")
 

@@ -8,7 +8,7 @@ return {
   },
   keys = {
     {
-      "<leader>s",
+      "<leader><Tab>",
       function()
         vim.cmd("SessionSave")
         vim.cmd("SessionSearch")

@@ -46,7 +46,8 @@ return {
       { "<leader>'",        telescope.resume },
       { '<leader>?',        telescope.oldfiles },
       { '<leader>,',        telescope.buffers },
-      { '<leader>cx',       telescope.diagnostics },
+      { '<leader>e',        telescope.diagnostics },
+      { 'grs',              telescope.lsp_workspace_symbols },
     }
   end
 }

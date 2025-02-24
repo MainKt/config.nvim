@@ -5,6 +5,10 @@ return {
     dependencies = {
       'saghen/blink.cmp',
       {
+        "ray-x/lsp_signature.nvim",
+        opts = {},
+      },
+      {
         "folke/lazydev.nvim",
         ft = "lua",
         opts = {
@@ -19,12 +23,22 @@ return {
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      local lspconfig = require('lspconfig')
       require("mason-lspconfig").setup {
         handlers = {
           function(server)
-            require("lspconfig")[server].setup { capabilities = capabilities }
+            lspconfig[server].setup { capabilities = capabilities }
           end
         }
+      }
+
+      lspconfig.sourcekit.setup {
+        capabilities = capabilities
+        -- vim.tbl_deep_extend("force", capabilities, {
+        --   workspace = {
+        --     didChangeWatchedFiles = { dynamicRegistration = true },
+        --   },
+        -- }),
       }
 
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -32,6 +46,8 @@ return {
           local c = vim.lsp.get_client_by_id(args.data.client_id)
 
           if not c then return end
+
+          if string.find(args.file, "xmake", 1, true) then return end
 
           if c:supports_method('textDocument/formatting') then
             vim.api.nvim_create_autocmd('BufWritePre', {
@@ -43,6 +59,8 @@ return {
           end
         end,
       })
+
+      vim.diagnostic.config({ virtual_text = true })
     end,
     keys = { { "<leader>=", vim.lsp.buf.format } },
   },

@@ -22,9 +22,7 @@ require("lazy").setup({
   spec = {
     { import = "config.plugins" },
 
-    { "rose-pine/neovim",       config = function() vim.cmd.colorscheme "rose-pine" end },
-
-    -- "mattn/emmet-vim",
+    { "EdenEast/nightfox.nvim", config = function() vim.cmd.colorscheme "carbonfox" end },
 
     {
       "tpope/vim-surround",
