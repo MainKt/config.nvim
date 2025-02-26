@@ -33,12 +33,18 @@ return {
       }
 
       lspconfig.sourcekit.setup {
-        capabilities = capabilities
-        -- vim.tbl_deep_extend("force", capabilities, {
-        --   workspace = {
-        --     didChangeWatchedFiles = { dynamicRegistration = true },
-        --   },
-        -- }),
+        capabilities = capabilities,
+        on_init = function(client)
+          client.server_capabilities.diagnosticProvider = {
+            interFileDependencies = true,
+            workspaceDiagnostics = false,
+          }
+        end,
+        on_attach = function(client, bufnr)
+          if client.name == "sourcekit" then
+            vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+          end
+        end,
       }
 
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -46,6 +52,11 @@ return {
           local c = vim.lsp.get_client_by_id(args.data.client_id)
 
           if not c then return end
+
+          if c.name == "sourcekit" and vim.bo[args.buf].filetype ~= "swift" then
+            vim.lsp.stop_client(c.id)
+            return
+          end
 
           if string.find(args.file, "xmake", 1, true) then return end
 

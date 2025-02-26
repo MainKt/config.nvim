@@ -12,6 +12,7 @@ vim.opt.shell = "/usr/bin/zsh"
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.updatetime = 250
+vim.opt.signcolumn = "yes"
 
 -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
 -- vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
